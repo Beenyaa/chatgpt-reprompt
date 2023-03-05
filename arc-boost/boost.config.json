@@ -1,0 +1,16 @@
+{
+  "pinned": false,
+  "id": "d2a47cd4-d632-4593-986f-5feef4b9d299",
+  "scope": "chat.openai.com",
+  "installedInProfiles": [{ "default": {} }],
+  "extensionId": "dnjahjalpfnpppfjahegmggpddjcdjkg",
+  "components": {
+    "contentScript": {
+      "path": "content.js",
+      "enabled": true,
+      "settings": { "run_at": "When page idles" }
+    }
+  },
+  "extensionEnabled": true,
+  "name": "ChatGPT Prompt Augmenter"
+}
