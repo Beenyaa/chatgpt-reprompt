@@ -154,7 +154,6 @@ tableBody.addEventListener("mouseover", (event) => {
     deleteButton.className = "delete-button";
     deleteButton.style.position = "relative";
     deleteButton.style.top = "50%";
-    deleteButton.style.transform = "translateY(-50%)";
 
     const lastCell = row.lastElementChild;
     lastCell.style.display = "flex";
