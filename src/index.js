@@ -1,3 +1,4 @@
+
 // Create the contentContainer element
 const contentContainer = document.createElement("div");
 contentContainer.classList.add(
@@ -251,28 +252,51 @@ function addNewRowIfNeeded(key = "") {
   }
 }
 
-  // Get references to the textarea element and the table body
-  const textarea = document.querySelector("textarea");
-  
-  // Listen for changes in the textarea element
-  textarea.addEventListener("input", () => {
-    // Get the text from the textarea element
-    const text = textarea.value;
-  
-    // Split the text into parts using the double curly brackets as a delimiter
-    const parts = text.match(/{{(\w+?)}}/g);
-  
-    // Process each part separately
-    for (let i = 0; i < parts.length; i++) {
-      // Extract the parameter name from the odd-indexed parts
-      const paramName = parts[i].replace("{{", "").replace("}}", "");
-      console.log(paramName)
-  
-      if (paramName) {
-        addNewRowIfNeeded(paramName);
+function searchTable(searchValue) {
+
+  // Loop through each row in the table
+  for (let i = 0; i < table.rows.length; i++) {
+    var row = table.rows[i];
+
+    // Loop through each cell in the row
+    for (let j = 1; j < row.cells.length; j++) {
+      var cell = row.cells[j];
+
+      // Check if the cell's text content matches the search value
+      if (cell.textContent.trim() === searchValue) {
+        // Return true
+        return true;
       }
     }
-  });
+  }
+
+  // If the search value is not found, return false
+  return false;
+}
+
+// Get references to the textarea element and the table body
+const textarea = document.querySelector("textarea");
+
+// Listen for changes in the textarea element
+textarea.addEventListener("input", () => {
+  // Get the text from the textarea element
+  const text = textarea.value;
+
+  // Split the text into parts using the double curly brackets as a delimiter
+  const parts = text.match(/{{(\w+?)}}/g);
+
+  // Process each part separately
+  for (let i = 0; i < parts.length; i++) {
+    // Extract the parameter name from the odd-indexed parts
+    const paramName = parts[i].replace("{{", "").replace("}}", "");
+    console.log(paramName)
+    const doesParamAlreadyExist = searchTable(paramName)
+
+    if (paramName && !doesParamAlreadyExist) {
+      addNewRowIfNeeded(paramName);
+    }
+  }
+});
 
 // Define the mutation observer callback function
 const observerCallback = (mutationsList, observer) => {

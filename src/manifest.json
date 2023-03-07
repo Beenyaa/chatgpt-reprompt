@@ -1,5 +1,6 @@
 {
   "name": "ChatGPT: RePrompt",
+  "description": "RePrompt is a productivity tool made for ChatGPT to help parameterise your prompts much like you would a request in Postman, Insomnia or Hoppscotch for reusability.",
   "version": "1.0.0",
   "manifest_version": 2,
   "icons": {
@@ -11,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.chat.openai.com/*"],
-      "js": ["./src/main.js"],
+      "js": ["main.js"],
       "run_at": "document_idle"
     }
   ],
