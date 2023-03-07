@@ -1,4 +1,3 @@
-
 // Create the contentContainer element
 const contentContainer = document.createElement("div");
 contentContainer.classList.add(
@@ -148,7 +147,7 @@ contentContainer.appendChild(table);
 // Add hover effect to rows
 tableBody.addEventListener("mouseover", (event) => {
   const row = event.target.closest("tr");
-  if (row != tableBody.firstChild) {
+  if (row != tableBody.lastChild && !row.querySelector(".delete-button")) {
     const deleteButton = document.createElement("button");
     deleteButton.innerHTML =
       '<svg stroke="white" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
@@ -161,17 +160,12 @@ tableBody.addEventListener("mouseover", (event) => {
     lastCell.style.display = "flex";
     lastCell.style.alignItems = "center";
     lastCell.appendChild(deleteButton);
-  }
-});
 
-// Remove hover effect from rows
-tableBody.addEventListener("mouseout", (event) => {
-  const row = event.target.closest("tr");
-  if (row) {
-    const deleteButton = row.querySelector(".delete-button");
-    if (deleteButton) {
-      deleteButton.remove();
-    }
+    row.addEventListener("mouseout", () => {
+      if (!row.matches(":hover")) {
+        deleteButton.remove();
+      }
+    });
   }
 });
 
@@ -179,10 +173,13 @@ tableBody.addEventListener("mouseout", (event) => {
 tableBody.addEventListener("click", (event) => {
   const deleteButton = event.target.closest(".delete-button");
   if (deleteButton) {
-    const row = deleteButton.parentNode;
+    const row = deleteButton.parentNode.parentNode
+    const keyValue = row.cells[1].querySelector("input").value
+    sessionStorage.removeItem(keyValue)
     row.remove();
   }
 });
+
 
 // Listen for input events on the last row's input fields
 keyInputField.addEventListener("input", addNewRowIfNeeded);
@@ -194,12 +191,9 @@ function addNewRowIfNeeded(key = "") {
   const keyInput = lastRow.cells[1].querySelector("input");
   const valueInput = lastRow.cells[2].querySelector("input");
 
-  if (keyInput.value.trim() == "" && valueInput.value.trim() == "" && key != "") {
-    keyInput.value = key;
-    return
-  }
-
   if (keyInput.value.trim() !== "" || valueInput.value.trim() !== "") {
+    sessionStorage.setItem(key||keyInput.value, valueInput.value);
+
     // Create a new row and add it to the table
     const newRow = tableBody.insertRow();
     newRow.classList.add("hover:bg-gray-700", "cursor-pointer");
@@ -250,31 +244,12 @@ function addNewRowIfNeeded(key = "") {
     newKeyInput.addEventListener("input", addNewRowIfNeeded);
     newValueInput.addEventListener("input", addNewRowIfNeeded);
   }
+  sessionStorage.setItem(keyInput.value, valueInput.value);
+  keyInput.value = keyInput.value;
+  return
 }
 
-function searchTable(searchValue) {
-
-  // Loop through each row in the table
-  for (let i = 0; i < table.rows.length; i++) {
-    var row = table.rows[i];
-
-    // Loop through each cell in the row
-    for (let j = 1; j < row.cells.length; j++) {
-      var cell = row.cells[j];
-
-      // Check if the cell's text content matches the search value
-      if (cell.textContent.trim() === searchValue) {
-        // Return true
-        return true;
-      }
-    }
-  }
-
-  // If the search value is not found, return false
-  return false;
-}
-
-// Get references to the textarea element and the table body
+// Get reference to the textarea element
 const textarea = document.querySelector("textarea");
 
 // Listen for changes in the textarea element
@@ -289,10 +264,8 @@ textarea.addEventListener("input", () => {
   for (let i = 0; i < parts.length; i++) {
     // Extract the parameter name from the odd-indexed parts
     const paramName = parts[i].replace("{{", "").replace("}}", "");
-    console.log(paramName)
-    const doesParamAlreadyExist = searchTable(paramName)
 
-    if (paramName && !doesParamAlreadyExist) {
+    if (paramName && sessionStorage.getItem(paramName)==null) {
       addNewRowIfNeeded(paramName);
     }
   }
@@ -300,30 +273,29 @@ textarea.addEventListener("input", () => {
 
 // Define the mutation observer callback function
 const observerCallback = (mutationsList, observer) => {
-  for (let mutation of mutationsList) {
+  mutationsList.forEach(mutation => {
     console.log(mutation.type);
-    if (mutation.type === "childList" || mutation.type === "attributes") {
-      const mainElement = document.querySelector("main");
-      const formElement = document.querySelector("form");
-      if (mainElement || formElement) {
+    if (mutation.type === "childList") {
+      const mainElement = mutation.target.querySelector("main");
+      console.log(mainElement)
+      if (mainElement) {
         mainElement.prepend(contentContainer);
         // textareaUpdate()
         observer.disconnect();
       }
     }
   }
+  )
 };
 
 // Create the mutation observer
 const observer = new MutationObserver(observerCallback);
 
 // Observe changes to the document's child nodes and URL
-observer.observe(document.documentElement, {
+observer.observe(document.body.parentElement, {
   subtree: true,
   childList: true,
-  attributes: true,
 });
-
 
 
 
