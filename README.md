@@ -1,8 +1,8 @@
 <div align="center">
 <img src="./src/assets/logo.svg" width="64" title="RePrompt Logo">
-<h1><code>ChatGPT: RePrompt</code></h1>
+<h1>ChatGPT: RePrompt</h1>
 
-<code>If you like the project, please consider [supporting me](https://www.buymeacoffee.com/beenyaa). :)</code>
+If you like the project, please consider [supporting me](https://www.buymeacoffee.com/beenyaa). :)
 
 [<a target="_blank" href="https://www.buymeacoffee.com/beenyaa">
     <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=beenyaa&button_colour=00cc99&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=ffffff" />
