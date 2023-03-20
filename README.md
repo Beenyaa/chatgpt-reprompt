@@ -32,9 +32,8 @@ To use RePrompt, follow these steps:
 
  1. Install the RePrompt extension for your preferred browser (Google
     Chrome, Mozilla Firefox, or The Browser Company Arc).
- 2. Open ChatGPT and click on the RePrompt icon in your browser toolbar.
- 3. In the RePrompt parameter manager, create a new parameter by
-    clicking the "Add Parameter" button.
+ 2. Open ChatGPT.
+ 3. In the RePrompt parameter manager, create a new parameter by typing in either the "KEY" or "VALUE" fields.
  4. Give your parameter a name and a default value.
  5. In your prompt, reference the parameter by adding double curly
     brackets around the parameter name, like `{{parameter_name}}`.
