@@ -4,7 +4,7 @@
   "description": "RePrompt is a productivity tool made for ChatGPT to help parameterise your prompts much like you would a request in Postman, Insomnia or Hoppscotch for reusability.",
   "main": "index",
   "scripts": {
-    "build": "swc ./src/content.js > ./build/build.js"
+    "build": "swc ./src --out-dir build --copy-files"
   },
   "author": "Bence Gadanyi (https://github.com/Beenyaa)",
   "license": "MIT",
